@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Soal Perencanaan dan Pengalamatan Jaringan</title>
+<style>
+:root{--bg:#f7f7f4;--card:#fff;--tx:#1d1d1b;--mut:#6b6b66;--ac:#2f5fd0;--bd:#dcdcd5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161618;--card:#212124;--tx:#ececea;--mut:#a0a09a;--ac:#7ea3ff;--bd:#37373b}}
+:root[data-theme="dark"]{--bg:#161618;--card:#212124;--tx:#ececea;--mut:#a0a09a;--ac:#7ea3ff;--bd:#37373b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.6rem;margin:.2em 0}h2{margin-top:2em;font-size:1.25rem}
+.sub{color:var(--mut);margin:0 0 1em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;margin:12px 0}
+.q{font-weight:600;margin:0 0 8px}
+label{display:block;padding:6px 8px;border-radius:8px;cursor:pointer}
+label:hover{background:var(--bg)}
+textarea{width:100%;min-height:90px;border:1px solid var(--bd);border-radius:8px;padding:8px;background:var(--bg);color:var(--tx);font:inherit}
+#prog{color:var(--mut);margin-top:12px}
+#score{font-size:1.3rem;font-weight:700;margin:16px 0;padding:14px 16px;border:2px solid var(--ac);border-radius:12px;display:none}
+</style>
+</head>
+<body>
+<main>
+<h1>Soal Perencanaan dan Pengalamatan Jaringan</h1>
+<p class="sub">35 pilihan ganda + 5 esai &middot; IP address, subnetting, dan perencanaan jaringan</p>
+<h2>Bagian A &ndash; Pilihan Ganda</h2>
+<div id="mc"></div>
+<div id="prog"></div>
+<div id="score"></div>
+<h2>Bagian B &ndash; Esai</h2>
+<div id="es"></div>
+</main>
+<script>
+// Format: [pertanyaan, jawaban benar, salah1, salah2, salah3] (opsi diacak otomatis)
+var MC=[
+['Pengalamatan jaringan adalah...','Pemberian alamat unik pada perangkat agar dapat saling berkomunikasi','Pemasangan kabel antar ruangan','Penggantian komponen komputer','Pembuatan situs web'],
+['Tahap pertama dalam perencanaan jaringan adalah...','Analisis kebutuhan (jumlah pengguna, perangkat, dan layanan)','Pembelian perangkat','Pemasangan konektor','Pengujian akhir'],
+['Alamat IPv4 ditulis dengan format...','Desimal bertitik yang terdiri dari 4 oktet','Heksadesimal dipisah titik dua','Biner 64 digit','Huruf dan angka acak'],
+['Satu oktet pada alamat IPv4 terdiri dari...','8 bit','4 bit','16 bit','32 bit'],
+['Oktet pertama IP kelas A berada pada rentang...','1 - 126','128 - 191','192 - 223','224 - 239'],
+['Oktet pertama IP kelas B berada pada rentang...','128 - 191','1 - 126','192 - 223','240 - 255'],
+['Oktet pertama IP kelas C berada pada rentang...','192 - 223','128 - 191','1 - 126','224 - 239'],
+['IP kelas D digunakan untuk...','Multicast','Jaringan skala besar','Jaringan rumah','Penelitian'],
+['Blok IP private kelas C adalah...','192.168.0.0 - 192.168.255.255','10.0.0.0 - 10.255.255.255','172.16.0.0 - 172.31.255.255','169.254.0.0 - 169.254.255.255'],
+['Blok IP private kelas B adalah...','172.16.0.0 - 172.31.255.255','192.168.0.0 - 192.168.255.255','10.0.0.0 - 10.255.255.255','127.0.0.0 - 127.255.255.255'],
+['Berikut yang merupakan IP publik adalah...','8.8.8.8','10.1.1.1','172.20.5.5','192.168.5.5'],
+['Alamat 127.0.0.1 (loopback) digunakan untuk...','Menguji protokol TCP/IP pada komputer sendiri','Menghubungkan ke internet','Alamat router','Alamat broadcast'],
+['Network ID adalah...','Alamat pertama dalam sebuah jaringan, semua bit host bernilai 0','Alamat terakhir dalam jaringan','Alamat gateway','Alamat DNS server'],
+['Alamat broadcast adalah...','Alamat terakhir dalam jaringan, semua bit host bernilai 1','Alamat pertama dalam jaringan','Alamat router','Alamat loopback'],
+['Rumus jumlah host yang dapat dipakai pada sebuah subnet adalah...','2^n - 2 (n = jumlah bit host)','2^n + 2','2n - 2','n^2 - 2'],
+['Subnet mask untuk prefix /24 adalah...','255.255.255.0','255.255.0.0','255.0.0.0','255.255.255.128'],
+['Subnet mask untuk prefix /26 adalah...','255.255.255.192','255.255.255.128','255.255.255.224','255.255.255.240'],
+['Jumlah host yang dapat dipakai pada jaringan /24 adalah...','254','255','256','252'],
+['Jumlah host yang dapat dipakai pada jaringan /26 adalah...','62','64','60','126'],
+['Jumlah host yang dapat dipakai pada jaringan /27 adalah...','30','32','28','62'],
+['Jaringan 192.168.1.0/24 dibagi menjadi 4 subnet sama besar. Prefix barunya adalah...','/26','/25','/27','/28'],
+['Alamat 192.168.10.70/26 berada pada jaringan dengan Network ID...','192.168.10.64','192.168.10.0','192.168.10.128','192.168.10.70'],
+['Alamat broadcast untuk jaringan 192.168.10.64/26 adalah...','192.168.10.127','192.168.10.126','192.168.10.128','192.168.10.255'],
+['Rentang host yang dapat dipakai pada 192.168.10.64/26 adalah...','192.168.10.65 - 192.168.10.126','192.168.10.64 - 192.168.10.127','192.168.10.65 - 192.168.10.127','192.168.10.66 - 192.168.10.125'],
+['Gateway pada sebuah jaringan adalah...','Perangkat (biasanya router) sebagai pintu keluar ke jaringan lain','Server penyimpan file','Alamat broadcast','Kabel penghubung switch'],
+['Notasi CIDR /20 menunjukkan bahwa...','20 bit pertama adalah bagian network','20 host dapat dipakai','Ada 20 subnet','Panjang alamat 20 bit'],
+['VLSM adalah...','Pembagian subnet dengan ukuran berbeda sesuai kebutuhan host','Pembagian subnet dengan ukuran selalu sama','Teknik membuat kabel jaringan','Protokol pemberi IP otomatis'],
+['Subnet mask 255.255.255.240 sama dengan prefix...','/28','/26','/27','/29'],
+['Jika meminjam 3 bit host untuk subnetting, jumlah subnet yang terbentuk adalah...','8','6','3','16'],
+['IPv6 memiliki panjang alamat...','128 bit','32 bit','64 bit','48 bit'],
+['IPv6 ditulis dalam format...','Heksadesimal yang dipisahkan titik dua','Desimal bertitik','Biner murni','Huruf kapital saja'],
+['Perangkat seperti server dan printer sebaiknya diberi IP...','Statis (manual) agar alamatnya tidak berubah','Acak setiap hari','APIPA','Broadcast'],
+['Alamat 169.254.x.x (APIPA) muncul ketika...','Komputer tidak mendapat IP dari server DHCP','Komputer terhubung ke internet','IP diatur statis','Kabel baru dipasang'],
+['NAT berfungsi untuk...','Menerjemahkan IP private menjadi IP publik','Memberi IP otomatis','Menerjemahkan nama domain','Memperkuat sinyal Wi-Fi'],
+['VLAN berfungsi untuk...','Memisahkan jaringan secara logis dalam satu switch fisik','Menambah kecepatan kabel','Mengubah IP publik','Mencetak dokumen jaringan']
+];
+var ES=[
+'Jelaskan tahapan perencanaan jaringan komputer, mulai dari analisis kebutuhan hingga dokumentasi!',
+'Jelaskan perbedaan IP publik dan IP private, lalu sebutkan rentang IP private kelas A, B, dan C!',
+'Jaringan 192.168.1.0/24 akan dibagi menjadi 4 subnet sama besar. Tentukan subnet mask baru, Network ID, rentang host, dan alamat broadcast tiap subnet!',
+'Jelaskan apa itu VLSM dan kapan digunakan. Buat contoh pembagian dari 192.168.10.0/24 untuk kebutuhan 100 host, 50 host, dan 25 host!',
+'Rancanglah skema topologi dan pengalamatan IP untuk sebuah lab komputer berisi 30 PC, 1 server, dan 1 printer, lengkap dengan subnet mask dan gateway!'
+];
+function sh(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+var L='ABCD',mc=document.getElementById('mc'),es=document.getElementById('es'),prog=document.getElementById('prog'),done=false;
+MC.forEach(function(m,i){
+ var c=document.createElement('div');c.className='card';
+ var q=document.createElement('p');q.className='q';q.textContent=(i+1)+'. '+m[0];c.appendChild(q);
+ sh(m.slice(1).map(function(t,k){return{t:t,ok:k===0}})).forEach(function(o,k){
+  var l=document.createElement('label');l.dataset.ok=o.ok?'1':'0';
+  var r=document.createElement('input');r.type='radio';r.name='q'+i;
+  var s=document.createElement('span');s.textContent=' '+L[k]+'. '+o.t;
+  l.appendChild(r);l.appendChild(s);c.appendChild(l)});
+ mc.appendChild(c)});
+ES.forEach(function(e,i){
+ var c=document.createElement('div');c.className='card';
+ var q=document.createElement('p');q.className='q';q.textContent=(i+1)+'. '+e;
+ var t=document.createElement('textarea');t.placeholder='Tulis jawabanmu di sini...';
+ c.appendChild(q);c.appendChild(t);es.appendChild(c)});
+function upd(){
+ if(done)return;
+ var a=0;for(var i=0;i<MC.length;i++){if(mc.querySelector('input[name="q'+i+'"]:checked'))a++}
+ prog.textContent='Terjawab: '+a+' / '+MC.length+' (nilai muncul otomatis setelah semua soal pilihan ganda dijawab)';
+ if(a<MC.length)return;
+ done=true;var n=0;
+ mc.querySelectorAll('label').forEach(function(l){var x=l.querySelector('input');if(x.checked&&l.dataset.ok==='1')n++;x.disabled=true});
+ var s=document.getElementById('score');
+ s.textContent='Nilai pilihan ganda: '+Math.round(n/MC.length*100)+' ('+n+' dari '+MC.length+' benar). Esai dinilai secara terpisah.';
+ s.style.display='block';prog.style.display='none';s.scrollIntoView({behavior:'smooth',block:'center'})}
+mc.addEventListener('change',upd);upd();
+</script>
+</body>
+</html>
